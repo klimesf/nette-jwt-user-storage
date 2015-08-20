@@ -109,6 +109,11 @@ class JWTUserStorage implements IUserStorage
 	 */
 	function setIdentity(IIdentity $identity = null)
 	{
+		if (!$identity) {
+			unset($this->jwtData['uid']);
+			unset($this->jwtData['roles']);
+			return;
+		}
 		$this->jwtData['uid'] = $identity->getId();
 		$this->jwtData['roles'] = $identity->getRoles();
 		$this->saveJWTCookie();
