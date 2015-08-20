@@ -1,0 +1,27 @@
+{
+    "name": "klimesf/nette-jwt-user-storage",
+    "description": "Nette IUserStorage implementation using JWT instead of sessions.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Filip Klimes",
+            "email": "filip@filipklimes.cz"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "nette/security": "^2.3",
+        "nette/http": "^2.3",
+        "firebase/php-jwt": "^3.0",
+        "nette/di": "^2.3"
+    },
+    "require-dev": {
+        "nette/tester": "^1.5"
+    },
+    "autoload": {
+        "psr-0": {
+            "Klimesf\\Security": "src/"
+        }
+    }
+}
