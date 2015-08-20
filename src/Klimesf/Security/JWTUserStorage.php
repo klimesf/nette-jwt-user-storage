@@ -180,7 +180,7 @@ class JWTUserStorage implements IUserStorage
 		}
 
 		try {
-			$this->jwtData = (array) $this->jwtService->decode($jwtCookie, $this->privateKey, $this->algorithm);
+			$this->jwtData = (array) $this->jwtService->decode($jwtCookie, $this->privateKey, [$this->algorithm]);
 
 		} catch (ExpiredException $e) {
 			$this->logoutReason = self::INACTIVITY;
