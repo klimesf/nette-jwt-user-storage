@@ -155,7 +155,7 @@ class JWTUserStorage implements IUserStorage
 	 */
 	function getLogoutReason()
 	{
-		return IUserStorage::INACTIVITY;
+		return $this->logoutReason;
 	}
 
 	/**
