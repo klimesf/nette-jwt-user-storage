@@ -27,5 +27,8 @@ class JWTUserStorageExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('jwtUserStorage'))
 			->setClass('Klimesf\Security\JWTUserStorage', [$config['privateKey'], $config['algorithm']]);
+
+		// Disable Nette's default IUserStorage implementation
+		$builder->getDefinition('security.userStorage')->setAutowired(false);
 	}
 }
