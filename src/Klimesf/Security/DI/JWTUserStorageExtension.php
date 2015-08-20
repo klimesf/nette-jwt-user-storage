@@ -22,8 +22,8 @@ class JWTUserStorageExtension extends CompilerExtension
 				"'{$this->name}:' in your config file.");
 		}
 
-		$builder->addDefinition($this->prefix('firebaseJWTService'))
-			->setClass('Klimesf\Security\JWT\FirebaseJWTService');
+		$builder->addDefinition($this->prefix('firebaseJWTWrapper'))
+			->setClass('Klimesf\Security\JWT\FirebaseJWTWrapper');
 
 		$builder->addDefinition($this->prefix('jwtUserStorage'))
 			->setClass('Klimesf\Security\JWTUserStorage', [$config['privateKey'], $config['algorithm']]);
