@@ -19,6 +19,9 @@ use Nette\Utils\DateTime;
 class JWTUserStorage implements IUserStorage
 {
 
+	/** Name of the JWT access token cookie. */
+	const COOKIE_NAME = 'jwt_access_token';
+
 	/**
 	 * @var Request
 	 */
@@ -91,11 +94,11 @@ class JWTUserStorage implements IUserStorage
 	 */
 	function setAuthenticated($state)
 	{
-		if ($state) {
-			$this->saveJWTCookie();
-		} else {
+		$this->jwtData['is_authenticated'] = $state;
+		if (!$state) {
 			$this->logoutReason = self::MANUAL;
 		}
+		$this->saveJWTCookie();
 		return $this;
 	}
 
@@ -108,7 +111,7 @@ class JWTUserStorage implements IUserStorage
 		if (!$this->loadJWTCookie()) {
 			return false;
 		}
-		return true;
+		return $this->jwtData['is_authenticated'];
 	}
 
 	/**
@@ -118,7 +121,7 @@ class JWTUserStorage implements IUserStorage
 	function setIdentity(IIdentity $identity = null)
 	{
 		if (!$identity) {
-			$this->jwtData = [];
+			$this->jwtData = ['is_authenticated' => false];
 			return;
 		}
 		$this->jwtData = array_merge(
@@ -137,7 +140,7 @@ class JWTUserStorage implements IUserStorage
 		if (!$this->loadJWTCookie()) {
 			return null;
 		}
-		return new Identity($this->jwtData['uid'], $this->jwtData['roles']);
+		return $this->identitySerializer->deserialize($this->jwtData);
 	}
 
 	/**
@@ -172,8 +175,11 @@ class JWTUserStorage implements IUserStorage
 	 */
 	private function saveJWTCookie()
 	{
+		if (empty($this->jwtData)) {
+			$this->response->deleteCookie(self::COOKIE_NAME);
+		}
 		$jwt = $this->jwtService->encode($this->jwtData, $this->privateKey, $this->algorithm);
-		$this->response->setCookie('jwt_access_token', $jwt, $this->expirationTime);
+		$this->response->setCookie(self::COOKIE_NAME, $jwt, $this->expirationTime);
 	}
 
 	/**
@@ -182,7 +188,7 @@ class JWTUserStorage implements IUserStorage
 	 */
 	private function loadJWTCookie()
 	{
-		$jwtCookie = $this->request->getCookie('jwt_access_token');
+		$jwtCookie = $this->request->getCookie(self::COOKIE_NAME);
 		if (!$jwtCookie) {
 			$this->logoutReason = self::INACTIVITY | self::BROWSER_CLOSED;
 			return false;

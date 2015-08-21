@@ -22,4 +22,12 @@ interface IIdentitySerializer
 	 */
 	public function serialize(IIdentity $identity);
 
+	/**
+	 * Deserializes the identity data from an array contained in the JWT and
+	 * loads into into IIdentity.
+	 * @param array $jwtData
+	 * @return IIdentity
+	 */
+	public function deserialize($jwtData);
+
 }

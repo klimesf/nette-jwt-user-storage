@@ -2,6 +2,8 @@
 
 
 namespace Klimesf\Security;
+
+use Nette\Security\Identity;
 use Nette\Security\IIdentity;
 
 /**
@@ -26,5 +28,16 @@ class IdentitySerializer implements IIdentitySerializer
 	}
 
 
-
+	/**
+	 * Deserializes the identity data from an array contained in the JWT and
+	 * loads into into IIdentity.
+	 * @param array $jwtData
+	 * @return IIdentity
+	 */
+	public function deserialize($jwtData)
+	{
+		return array_key_exists('uid', $jwtData) && array_key_exists('roles', $jwtData)
+			? new Identity($jwtData['uid'], $jwtData['roles'])
+			: null;
+	}
 }
