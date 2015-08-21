@@ -50,7 +50,12 @@ class JWTUserStorage implements IUserStorage
 	/**
 	 * @var boolean
 	 */
-	private $generateJti;
+	private $generateJti = true;
+
+	/**
+	 * @var boolean
+	 */
+	private $generateIat = true;
 
 	/**
 	 * @var array
@@ -73,7 +78,7 @@ class JWTUserStorage implements IUserStorage
 	private $identitySerializer;
 
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $cookieSaved;
 
@@ -81,22 +86,37 @@ class JWTUserStorage implements IUserStorage
 	 * JWTUserStorage constructor.
 	 * @param string               $privateKey
 	 * @param string               $algorithm
-	 * @param boolean              $generateJti
 	 * @param Request              $request
 	 * @param Response             $response
 	 * @param IJsonWebTokenService $jsonWebTokenService
 	 * @param IIdentitySerializer  $identitySerializer
 	 */
-	public function __construct($privateKey, $algorithm, $generateJti, Request $request, Response $response,
-								IJsonWebTokenService $jsonWebTokenService, IIdentitySerializer $identitySerializer)
+	public function __construct($privateKey, $algorithm, Request $request,
+								Response $response, IJsonWebTokenService $jsonWebTokenService,
+								IIdentitySerializer $identitySerializer)
 	{
 		$this->privateKey = $privateKey;
 		$this->algorithm = $algorithm;
-		$this->generateJti = $generateJti;
 		$this->request = $request;
 		$this->response = $response;
 		$this->jwtService = $jsonWebTokenService;
 		$this->identitySerializer = $identitySerializer;
+	}
+
+	/**
+	 * @param boolean $generateJti
+	 */
+	public function setGenerateJti($generateJti)
+	{
+		$this->generateJti = $generateJti;
+	}
+
+	/**
+	 * @param boolean $generateIat
+	 */
+	public function setGenerateIat($generateIat)
+	{
+		$this->generateIat = $generateIat;
 	}
 
 	/**
@@ -187,6 +207,11 @@ class JWTUserStorage implements IUserStorage
 			$this->response->deleteCookie(self::COOKIE_NAME);
 			return;
 		}
+
+		if ($this->generateIat) {
+			$this->jwtData['iat'] = DateTime::from('NOW')->format('U');
+		}
+
 		// Unset JTI if there was any
 		unset($this->jwtData['jti']);
 		if ($this->generateJti) {

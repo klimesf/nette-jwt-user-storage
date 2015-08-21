@@ -53,12 +53,13 @@ JWTUserStorage:
 	expiration: false       # sets JWT and cookie to never expire
 ```
 
-By default, `jti` (see [JWT draft](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32)) is added to
-your JWTs. If you don't want to use them, set `generateJti` option to false.
+By default, `jti` and `iat` (see [JWT draft](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32)) are added
+to your JWTs. If you don't want to use them, set `generateJti` and `generateIat` options to false.
 
 ```yml
 JWTUserStorage:
 	generateJti: false          # disables jti generation for your JWT access tokens
+	generateIat: false          # disables iat generation for your JWT access tokens
 ```
 
 If you want to define your own `Nette\Security\IIdentity` serializer, which serializes your identity implementation

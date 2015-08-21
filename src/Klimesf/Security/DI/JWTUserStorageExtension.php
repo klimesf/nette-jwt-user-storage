@@ -16,6 +16,7 @@ class JWTUserStorageExtension extends CompilerExtension
 	private $defaults = [
 		'identitySerializer' => 'Klimesf\Security\IdentitySerializer',
 		'generateJti'        => true,
+		'generateIat'        => true,
 		'expiration'         => '20 days',
 	];
 
@@ -33,7 +34,9 @@ class JWTUserStorageExtension extends CompilerExtension
 
 		$userStorageDefinition = $builder->addDefinition($this->prefix('jwtUserStorage'))
 			->setClass('Klimesf\Security\JWTUserStorage',
-				[$config['privateKey'], $config['algorithm'], $config['generateJti']]);
+				[$config['privateKey'], $config['algorithm']]);
+		$userStorageDefinition->addSetup('setGenerateIat', [$config['generateIat']]);
+		$userStorageDefinition->addSetup('setGenerateJti', [$config['generateJti']]);
 
 		// If expiration date is set, add service setup
 		if ($config['expiration']) {
