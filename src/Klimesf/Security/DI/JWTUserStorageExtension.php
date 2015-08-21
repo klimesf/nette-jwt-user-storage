@@ -15,6 +15,7 @@ class JWTUserStorageExtension extends CompilerExtension
 
 	private $defaults = [
 		'identitySerializer' => 'Klimesf\Security\IdentitySerializer',
+		'generateJti'        => true,
 	];
 
 	public function loadConfiguration()
@@ -30,7 +31,7 @@ class JWTUserStorageExtension extends CompilerExtension
 			->setClass('Klimesf\Security\JWT\FirebaseJWTWrapper');
 
 		$builder->addDefinition($this->prefix('jwtUserStorage'))
-			->setClass('Klimesf\Security\JWTUserStorage', [$config['privateKey'], $config['algorithm']]);
+			->setClass('Klimesf\Security\JWTUserStorage', [$config['privateKey'], $config['algorithm'], $config['generateJti']]);
 
 		$builder->addDefinition($this->prefix('identitySerializer'))
 			->setClass($config['identitySerializer']);

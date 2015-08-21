@@ -11,6 +11,7 @@ use Nette\Security\Identity;
 use Nette\Security\IIdentity;
 use Nette\Security\IUserStorage;
 use Nette\Utils\DateTime;
+use Nette\Utils\Random;
 
 /**
  * @package   Klimesf\Security
@@ -48,6 +49,11 @@ class JWTUserStorage implements IUserStorage
 	private $algorithm;
 
 	/**
+	 * @var boolean
+	 */
+	private $generateJti;
+
+	/**
 	 * @var array
 	 */
 	private $jwtData;
@@ -71,16 +77,18 @@ class JWTUserStorage implements IUserStorage
 	 * JWTUserStorage constructor.
 	 * @param string               $privateKey
 	 * @param string               $algorithm
+	 * @param boolean              $generateJti
 	 * @param Request              $request
 	 * @param Response             $response
 	 * @param IJsonWebTokenService $jsonWebTokenService
 	 * @param IIdentitySerializer  $identitySerializer
 	 */
-	public function __construct($privateKey, $algorithm, Request $request, Response $response,
+	public function __construct($privateKey, $algorithm, $generateJti, Request $request, Response $response,
 								IJsonWebTokenService $jsonWebTokenService, IIdentitySerializer $identitySerializer)
 	{
 		$this->privateKey = $privateKey;
 		$this->algorithm = $algorithm;
+		$this->generateJti = $generateJti;
 		$this->request = $request;
 		$this->response = $response;
 		$this->jwtService = $jsonWebTokenService;
@@ -177,7 +185,15 @@ class JWTUserStorage implements IUserStorage
 	{
 		if (empty($this->jwtData)) {
 			$this->response->deleteCookie(self::COOKIE_NAME);
+			return;
 		}
+		// Unset JTI if there was any
+		unset($this->jwtData['jti']);
+		if ($this->generateJti) {
+			// Generate new JTI
+			$this->jwtData['jti'] = hash('sha256', serialize($this->jwtData) . Random::generate(10));
+		}
+		// Encode the JWT and set the cookie
 		$jwt = $this->jwtService->encode($this->jwtData, $this->privateKey, $this->algorithm);
 		$this->response->setCookie(self::COOKIE_NAME, $jwt, $this->expirationTime);
 	}
