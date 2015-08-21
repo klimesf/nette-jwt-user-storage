@@ -1,4 +1,8 @@
 # nette-jwt-user-storage
+
+[![Latest Stable Version](https://poser.pugx.org/klimesf/nette-jwt-user-storage/version)](https://packagist.org/packages/klimesf/nette-jwt-user-storage)
+[![License](https://poser.pugx.org/klimesf/nette-jwt-user-storage/license)](https://packagist.org/packages/klimesf/nette-jwt-user-storage)
+
 Nette IUserStorage implementation using JWT access token instead of PHP sessions.
 
 > Disclaimer: If you don't know what JWT is, please refer to
