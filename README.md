@@ -1,5 +1,7 @@
 # nette-jwt-user-storage
 
+[![Join the chat at https://gitter.im/klimesf/nette-jwt-user-storage](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/klimesf/nette-jwt-user-storage?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Latest Stable Version](https://poser.pugx.org/klimesf/nette-jwt-user-storage/version)](https://packagist.org/packages/klimesf/nette-jwt-user-storage)
 [![License](https://poser.pugx.org/klimesf/nette-jwt-user-storage/license)](https://packagist.org/packages/klimesf/nette-jwt-user-storage)
 
