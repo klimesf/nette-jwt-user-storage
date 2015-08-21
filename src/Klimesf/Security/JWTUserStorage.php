@@ -60,20 +60,28 @@ class JWTUserStorage implements IUserStorage
 	private $logoutReason;
 
 	/**
+	 * @var IIdentitySerializer
+	 */
+	private $identitySerializer;
+
+	/**
 	 * JWTUserStorage constructor.
 	 * @param string               $privateKey
 	 * @param string               $algorithm
 	 * @param Request              $request
 	 * @param Response             $response
 	 * @param IJsonWebTokenService $jsonWebTokenService
+	 * @param IIdentitySerializer  $identitySerializer
 	 */
-	public function __construct($privateKey, $algorithm, Request $request, Response $response, IJsonWebTokenService $jsonWebTokenService)
+	public function __construct($privateKey, $algorithm, Request $request, Response $response,
+								IJsonWebTokenService $jsonWebTokenService, IIdentitySerializer $identitySerializer)
 	{
 		$this->privateKey = $privateKey;
 		$this->algorithm = $algorithm;
 		$this->request = $request;
 		$this->response = $response;
 		$this->jwtService = $jsonWebTokenService;
+		$this->identitySerializer = $identitySerializer;
 	}
 
 	/**
@@ -110,12 +118,13 @@ class JWTUserStorage implements IUserStorage
 	function setIdentity(IIdentity $identity = null)
 	{
 		if (!$identity) {
-			unset($this->jwtData['uid']);
-			unset($this->jwtData['roles']);
+			$this->jwtData = [];
 			return;
 		}
-		$this->jwtData['uid'] = $identity->getId();
-		$this->jwtData['roles'] = $identity->getRoles();
+		$this->jwtData = array_merge(
+			$this->jwtData,
+			$this->identitySerializer->serialize($identity)
+		);
 		$this->saveJWTCookie();
 	}
 
