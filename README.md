@@ -35,12 +35,20 @@ extensions:
 	jwtUserStorage: Klimesf\Security\DI\JWTUserStorageExtension
 ```
 
-Then configure its properties.
+Then configure its required properties.
 
 ```yml
 JWTUserStorage:
 	privateKey: 'secret-cat'    # this secret is used to sign the JWT
 	algorithm: 'HS256'          # this is the signing algorithm
+```
+
+By default, `jti` (see [JWT draft](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32)) is added to
+your JWTs. If you don't want to use them, set `generateJti` option to false.
+
+```yml
+JWTUserStorage:
+	generateJti: false          # disables jti generation for your JWT access tokens
 ```
 
 If you want to define your own `Nette\Security\IIdentity` serializer, which serializes your identity implementation
@@ -85,3 +93,4 @@ Literature
 - [Stormpath: Where to store JWTs](https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage/)
 - [Reddit: JWT vs session cookies](https://www.reddit.com/r/webdev/comments/3afcs9/jwt_vs_session_cookies_authentication/)
 - [Dev Kimchi](http://devkimchi.com/1622/can-json-web-token-jwt-be-an-alternative-for-session/)
+- [JTI Generation](https://github.com/bshaffer/oauth2-server-php/issues/265)
