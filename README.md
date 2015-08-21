@@ -21,8 +21,6 @@ storage, where the JWT is a key.
 
 This also means your application is ready to become SPA in the future. :)
 
-No more problems with ugly PHP sessions!
-
 
 Configuration
 -------------
