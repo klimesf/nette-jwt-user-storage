@@ -22,7 +22,7 @@ class IdentitySerializer implements IIdentitySerializer
 	 */
 	public function serialize(IIdentity $identity)
 	{
-		$jwtData['uid'] = $identity->getId();
+		$jwtData['sub'] = $identity->getId();
 		$jwtData['roles'] = $identity->getRoles();
 		return $jwtData;
 	}
@@ -36,8 +36,8 @@ class IdentitySerializer implements IIdentitySerializer
 	 */
 	public function deserialize($jwtData)
 	{
-		return array_key_exists('uid', $jwtData) && array_key_exists('roles', $jwtData)
-			? new Identity($jwtData['uid'], $jwtData['roles'])
+		return array_key_exists('sub', $jwtData) && array_key_exists('roles', $jwtData)
+			? new Identity($jwtData['sub'], $jwtData['roles'])
 			: null;
 	}
 }
