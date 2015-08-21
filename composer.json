@@ -11,6 +11,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
+        "php": ">= 5.4.0",
         "nette/security": "^2.3",
         "nette/http": "^2.3",
         "firebase/php-jwt": "^3.0",

@@ -41,7 +41,7 @@ JWTUserStorage:
 ```
 
 If you want to define your own `Nette\Security\IIdentity` serializer, which serializes your identity implementation
-into the JWT body, you can implement `Klimesf\Security\IIdentitySerializer` 
+into the JWT body, you can implement `Klimesf\Security\IIdentitySerializer`
 
 ```
 namespace Your\Own;
