@@ -43,6 +43,16 @@ JWTUserStorage:
 	algorithm: 'HS256'          # this is the signing algorithm
 ```
 
+Both the JWT and the cookie in which it's stored is by default set to expire in 20 days. If you want to fiddle
+with expiration time, use `expiration` option:
+
+```yml
+JWTUserStorage:
+	expiration: 20 days     # sets JWT and cookie expiration time to 20 days (this is the default option)
+	expiration: 20 minutes  # sets JWT and cookie expiration time to 20 minutes
+	expiration: false       # sets JWT and cookie to never expire
+```
+
 By default, `jti` (see [JWT draft](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32)) is added to
 your JWTs. If you don't want to use them, set `generateJti` option to false.
 

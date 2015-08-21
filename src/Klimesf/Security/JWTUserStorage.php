@@ -7,7 +7,6 @@ use Firebase\JWT\ExpiredException;
 use Klimesf\Security\JWT\IJsonWebTokenService;
 use Nette\Http\Request;
 use Nette\Http\Response;
-use Nette\Security\Identity;
 use Nette\Security\IIdentity;
 use Nette\Security\IUserStorage;
 use Nette\Utils\DateTime;
@@ -74,6 +73,11 @@ class JWTUserStorage implements IUserStorage
 	private $identitySerializer;
 
 	/**
+	 * @var bool
+	 */
+	private $cookieSaved;
+
+	/**
 	 * JWTUserStorage constructor.
 	 * @param string               $privateKey
 	 * @param string               $algorithm
@@ -116,10 +120,8 @@ class JWTUserStorage implements IUserStorage
 	 */
 	function isAuthenticated()
 	{
-		if (!$this->loadJWTCookie()) {
-			return false;
-		}
-		return $this->jwtData['is_authenticated'];
+		$this->loadJWTCookie();
+		return array_key_exists('is_authenticated', $this->jwtData) ? $this->jwtData['is_authenticated'] : false;
 	}
 
 	/**
@@ -145,9 +147,7 @@ class JWTUserStorage implements IUserStorage
 	 */
 	function getIdentity()
 	{
-		if (!$this->loadJWTCookie()) {
-			return null;
-		}
+		$this->loadJWTCookie();
 		return $this->identitySerializer->deserialize($this->jwtData);
 	}
 
@@ -196,6 +196,7 @@ class JWTUserStorage implements IUserStorage
 		// Encode the JWT and set the cookie
 		$jwt = $this->jwtService->encode($this->jwtData, $this->privateKey, $this->algorithm);
 		$this->response->setCookie(self::COOKIE_NAME, $jwt, $this->expirationTime);
+		$this->cookieSaved = true; // Set cookie saved flag to true, so loadJWTCookie() doesn't rewrite our data
 	}
 
 	/**
@@ -204,6 +205,10 @@ class JWTUserStorage implements IUserStorage
 	 */
 	private function loadJWTCookie()
 	{
+		if ($this->cookieSaved) {
+			return true;
+		}
+
 		$jwtCookie = $this->request->getCookie(self::COOKIE_NAME);
 		if (!$jwtCookie) {
 			$this->logoutReason = self::INACTIVITY | self::BROWSER_CLOSED;

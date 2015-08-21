@@ -16,6 +16,7 @@ class JWTUserStorageExtension extends CompilerExtension
 	private $defaults = [
 		'identitySerializer' => 'Klimesf\Security\IdentitySerializer',
 		'generateJti'        => true,
+		'expiration'         => '20 days',
 	];
 
 	public function loadConfiguration()
@@ -30,8 +31,14 @@ class JWTUserStorageExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('firebaseJWTWrapper'))
 			->setClass('Klimesf\Security\JWT\FirebaseJWTWrapper');
 
-		$builder->addDefinition($this->prefix('jwtUserStorage'))
-			->setClass('Klimesf\Security\JWTUserStorage', [$config['privateKey'], $config['algorithm'], $config['generateJti']]);
+		$userStorageDefinition = $builder->addDefinition($this->prefix('jwtUserStorage'))
+			->setClass('Klimesf\Security\JWTUserStorage',
+				[$config['privateKey'], $config['algorithm'], $config['generateJti']]);
+
+		// If expiration date is set, add service setup
+		if ($config['expiration']) {
+			$userStorageDefinition->addSetup('setExpiration', [$config['expiration']]);
+		}
 
 		$builder->addDefinition($this->prefix('identitySerializer'))
 			->setClass($config['identitySerializer']);
