@@ -93,3 +93,4 @@ Literature
 - [Stormpath: Where to store JWTs](https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage/)
 - [Reddit: JWT vs session cookies](https://www.reddit.com/r/webdev/comments/3afcs9/jwt_vs_session_cookies_authentication/)
 - [Dev Kimchi](http://devkimchi.com/1622/can-json-web-token-jwt-be-an-alternative-for-session/)
+- [JTI Generation](https://github.com/bshaffer/oauth2-server-php/issues/265)
