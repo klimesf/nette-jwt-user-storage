@@ -14,7 +14,7 @@ use Nette\Utils\DateTime;
 
 /**
  * @package   Klimesf\Security
- * @author    Filip Klimes <filipklimes@startupjobs.cz>
+ * @author    Filip Klimes <filip@filipklimes.cz>
  */
 class JWTUserStorage implements IUserStorage
 {

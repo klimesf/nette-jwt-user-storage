@@ -8,7 +8,7 @@ use Nette\Security\IIdentity;
 
 /**
  * @package   Klimesf\Security
- * @author    Filip Klimes <filipklimes@startupjobs.cz>
+ * @author    Filip Klimes <filip@filipklimes.cz>
  * @copyright 2015, Startupedia s.r.o.
  */
 class IdentitySerializer implements IIdentitySerializer

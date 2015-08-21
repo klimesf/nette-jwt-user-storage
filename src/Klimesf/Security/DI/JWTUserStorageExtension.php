@@ -8,7 +8,7 @@ use Nette\DI\CompilerExtension;
 /**
  * Nette DI extension which registers JWTUserStorage.
  * @package   Klimesf\Security\DI
- * @author    Filip Klimes <filipklimes@startupjobs.cz>
+ * @author    Filip Klimes <filip@filipklimes.cz>
  */
 class JWTUserStorageExtension extends CompilerExtension
 {

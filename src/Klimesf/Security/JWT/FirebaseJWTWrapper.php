@@ -13,7 +13,7 @@ use UnexpectedValueException;
 /**
  * Wraps statis Firebase's JWT implementation.
  * @package   Klimesf\Security\JWT
- * @author    Filip Klimes <filipklimes@startupjobs.cz>
+ * @author    Filip Klimes <filip@filipklimes.cz>
  */
 class FirebaseJWTWrapper implements IJsonWebTokenService
 {

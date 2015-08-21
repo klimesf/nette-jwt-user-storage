@@ -9,7 +9,7 @@ use Nette\Security\IIdentity;
  * Interface for IIdentity serializer used to serialize your implementation
  * of Nette\Security\IIdentity and store the data in the JWT access token.
  * @package   Klimesf\Security
- * @author    Filip Klimes <filipklimes@startupjobs.cz>
+ * @author    Filip Klimes <filip@filipklimes.cz>
  */
 interface IIdentitySerializer
 {

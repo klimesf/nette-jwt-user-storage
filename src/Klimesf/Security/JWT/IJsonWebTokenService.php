@@ -12,7 +12,7 @@ use \UnexpectedValueException;
 /**
  * Interface meant to be implemented by a service which can encode and decode JWTs.
  * @package   Klimesf\Security\JWT
- * @author    Filip Klimes <filipklimes@startupjobs.cz>
+ * @author    Filip Klimes <filip@filipklimes.cz>
  */
 interface IJsonWebTokenService
 {
