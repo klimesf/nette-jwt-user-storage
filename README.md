@@ -72,6 +72,12 @@ Known issues
  probably because [Tracy\Tracy](https://github.com/tracy/tracy) uses it.
 
 
+Discussion threads
+------------------
+
+- Czech discussion thread on [Nette Forum](https://forum.nette.org/cs/24081-nette-jwt-user-storage-dejte-sbohem-php-session#p161518)
+
+
 Literature
 ----------
 
