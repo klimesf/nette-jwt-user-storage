@@ -60,7 +60,7 @@ class JWTUserStorage implements IUserStorage
 	/**
 	 * @var array
 	 */
-	private $jwtData;
+	private $jwtData = array();
 
 	/**
 	 * @var string
@@ -168,6 +168,9 @@ class JWTUserStorage implements IUserStorage
 	function getIdentity()
 	{
 		$this->loadJWTCookie();
+		if (empty($this->jwtData)) {
+			return null;
+		}
 		return $this->identitySerializer->deserialize($this->jwtData);
 	}
 
@@ -226,28 +229,23 @@ class JWTUserStorage implements IUserStorage
 
 	/**
 	 * Loads JWT from HTTP cookie and stores the data into the $jwtData variable.
-	 * @return array|bool The JWT data as array or FALSE if there is no JWT cookie.
 	 */
 	private function loadJWTCookie()
 	{
 		if ($this->cookieSaved) {
-			return true;
+			return;
 		}
 
 		$jwtCookie = $this->request->getCookie(self::COOKIE_NAME);
 		if (!$jwtCookie) {
 			$this->logoutReason = self::INACTIVITY | self::BROWSER_CLOSED;
-			return false;
+			return;
 		}
 
 		try {
 			$this->jwtData = (array) $this->jwtService->decode($jwtCookie, $this->privateKey, [$this->algorithm]);
-
 		} catch (ExpiredException $e) {
 			$this->logoutReason = self::INACTIVITY;
-			return false;
 		}
-
-		return $this->jwtData;
 	}
 }
