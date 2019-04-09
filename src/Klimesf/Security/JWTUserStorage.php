@@ -136,7 +136,7 @@ class JWTUserStorage implements IUserStorage
 		$cookieSecure = null,
 		$cookieHttpOnly = null,
 		$cookieName = null
-    ) {
+	) {
 		$this->privateKey = $privateKey;
 		$this->algorithm = $algorithm;
 		$this->request = $request;
