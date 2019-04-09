@@ -124,10 +124,19 @@ class JWTUserStorage implements IUserStorage
 	 * @param bool                 $cookieHttpOnly
 	 * @param string               $cookieName
 	 */
-	public function __construct($privateKey, $algorithm, IRequest $request,
-                                IResponse $response, IJsonWebTokenService $jsonWebTokenService,
-                                IIdentitySerializer $identitySerializer, $cookiePath = null, $cookieDomain = null, $cookieSecure = null, $cookieHttpOnly = null, $cookieName = null)
-	{
+	public function __construct(
+		$privateKey,
+		$algorithm,
+		IRequest $request,
+		IResponse $response,
+		IJsonWebTokenService $jsonWebTokenService,
+		IIdentitySerializer $identitySerializer,
+		$cookiePath = null,
+		$cookieDomain = null,
+		$cookieSecure = null,
+		$cookieHttpOnly = null,
+		$cookieName = null
+    ) {
 		$this->privateKey = $privateKey;
 		$this->algorithm = $algorithm;
 		$this->request = $request;
