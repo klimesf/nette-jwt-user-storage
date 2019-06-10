@@ -106,11 +106,6 @@ class JWTUserStorage implements IUserStorage
 	private $cookieName;
 
 	/**
-	 * @var boolean
-	 */
-	private $cookieSaved;
-
-	/**
 	 * JWTUserStorage constructor.
 	 * @param string               $privateKey
 	 * @param string               $algorithm
@@ -123,6 +118,9 @@ class JWTUserStorage implements IUserStorage
 	 * @param bool                 $cookieSecure
 	 * @param bool                 $cookieHttpOnly
 	 * @param string               $cookieName
+	 * @param bool                 $forceSetCookie Set to true, to make sure Set-Cookie header is always present in the response even if nothing about the identity has changed.
+	 *                                             If this is true and PHP ini directive suhosin.cookie.encrypt is not false, it will generate duplicate Set-Cookie headers
+	 *                                             when identity data (those persisted in cookie) is changed.
 	 */
 	public function __construct(
 		$privateKey,
@@ -135,7 +133,8 @@ class JWTUserStorage implements IUserStorage
 		$cookieDomain = null,
 		$cookieSecure = null,
 		$cookieHttpOnly = null,
-		$cookieName = null
+		$cookieName = null,
+		$forceSetCookie = false
 	) {
 		$this->privateKey = $privateKey;
 		$this->algorithm = $algorithm;
@@ -148,6 +147,10 @@ class JWTUserStorage implements IUserStorage
 		$this->cookieSecure = $cookieSecure;
 		$this->cookieHttpOnly = $cookieHttpOnly;
 		$this->cookieName = $cookieName ?: 'jwt_access_token';
+		$this->loadJWTCookie();
+		if ($forceSetCookie) {
+			$this->saveJWTCookie();
+		}
 	}
 
 	/**
@@ -187,7 +190,6 @@ class JWTUserStorage implements IUserStorage
 	 */
 	function isAuthenticated()
 	{
-		$this->loadJWTCookie();
 		return array_key_exists('is_authenticated', $this->jwtData) ? $this->jwtData['is_authenticated'] : false;
 	}
 
@@ -217,7 +219,6 @@ class JWTUserStorage implements IUserStorage
 	 */
 	function getIdentity()
 	{
-		$this->loadJWTCookie();
 		if (empty($this->jwtData)) {
 			return null;
 		}
@@ -275,7 +276,6 @@ class JWTUserStorage implements IUserStorage
 		// Encode the JWT and set the cookie
 		$jwt = $this->jwtService->encode($this->jwtData, $this->privateKey, $this->algorithm);
 		$this->response->setCookie($this->cookieName, $jwt, $this->expirationTime, $this->cookiePath, $this->cookieDomain, $this->cookieSecure, $this->cookieHttpOnly);
-		$this->cookieSaved = true; // Set cookie saved flag to true, so loadJWTCookie() doesn't rewrite our data
 	}
 
 	/**
@@ -283,10 +283,6 @@ class JWTUserStorage implements IUserStorage
 	 */
 	private function loadJWTCookie()
 	{
-		if ($this->cookieSaved) {
-			return;
-		}
-
 		$jwtCookie = $this->request->getCookie($this->cookieName);
 		if (!$jwtCookie) {
 			$this->logoutReason = self::INACTIVITY | self::BROWSER_CLOSED;
